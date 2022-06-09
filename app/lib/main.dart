@@ -55,9 +55,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(94, 177, 255, 1),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Center(child: Text(widget.title)),
+        title: const Center(
+          child: ImageIcon(AssetImage('assets/logo.png'), size: 90, color: Colors.blue,),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Center(
         child: FutureBuilder<List>(
@@ -76,6 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15))
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/addEvents');
         },
@@ -96,11 +103,12 @@ class EventsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+
         itemCount: events.isEmpty ? 0 : events.length,
         itemBuilder: (context, index) {
           return Container(
             margin: const EdgeInsets.only(top: 20, right: 20, left: 20),
-            height: 150,
+            height: 100,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -116,8 +124,8 @@ class EventsScreen extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10)),
                 color: index % 2 == 0 ? 
-                const Color.fromRGBO(109, 255, 41, 0.68) : 
-                const Color.fromRGBO(255, 245, 0, 0.68),
+                const Color.fromRGBO(98, 182, 203, 1) : 
+                const Color.fromRGBO(139, 111, 169, 1),
                 ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
