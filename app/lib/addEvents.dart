@@ -50,7 +50,7 @@ class _AddEventsState extends State<AddEvents> {
             padding: const EdgeInsets.all(15),
             child: TextFormField(
               controller: fieldEventDesc,
-              maxLines: 5,
+              maxLines: 4,
               decoration: const InputDecoration(
                 alignLabelWithHint: true,
                 border: OutlineInputBorder(),
