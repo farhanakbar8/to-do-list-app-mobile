@@ -1,20 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class AddEvents extends StatefulWidget {
-  const AddEvents({Key? key}) : super(key: key);
+class UpdateEvents extends StatefulWidget {
+  final String id;
+  final String name;
+  final String description;
+  final String time;
+
+  const UpdateEvents(
+      {Key? key,
+      required this.id,
+      required this.name,
+      required this.description,
+      required this.time})
+      : super(key: key);
 
   @override
-  _AddEventsState createState() => _AddEventsState();
+  _UpdateEventsState createState() => _UpdateEventsState();
 }
 
-class _AddEventsState extends State<AddEvents> {
+class _UpdateEventsState extends State<UpdateEvents> {
   final fieldEventName = TextEditingController();
   final fieldEventDesc = TextEditingController();
   final fieldTimeDate = TextEditingController();
   bool isName = false;
   bool isDesc = false;
   bool isDateTime = false;
+
+  Future updateData(
+      String id, String name, String desc, String timeDate) async {
+    var url = 'http://192.168.56.1/api/updateEvent.php';
+    final response = await http.post(Uri.parse(url), body: {
+      "id": id,
+      "eventName": name,
+      "eventDesc": desc,
+      "timeDate": timeDate
+    });
+    var res = response.body;
+
+    if (res == "true") {
+      print('in');
+      
+    } else {
+      // ignore: avoid_print
+      print("Error: $res");
+    }
+  }
+
   @override
   void dispose() {
     fieldEventName.dispose();
@@ -23,35 +55,19 @@ class _AddEventsState extends State<AddEvents> {
     super.dispose();
   }
 
-  Future _saveData(String name, String desc, String timeDate) async {
-    var url = 'http://192.168.56.1/api/saveData.php';
-    final response = await http.post(Uri.parse(url),
-        body: {"eventName": name, "eventDesc": desc, "timeDate": timeDate});
-    var res = response.body;
-
-    if (res == "true") {
-      print('in');
-      Navigator.pop(context);
-    } else {
-      // ignore: avoid_print
-      print("Error: $res");
-    }
+  @override
+  void initState() {
+    fieldEventName.text = widget.name;
+    fieldEventDesc.text = widget.description;
+    fieldTimeDate.text = widget.time;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Container(
-          margin: const EdgeInsets.only(left: 80),
-          child: const Text(
-            'Add Events',
-            style: TextStyle(color: Colors.blue),
-          ),
-        ),
-        iconTheme: IconThemeData(color: Colors.blue[600]),
+        title: const Text("Edit Events"),
       ),
       body: Column(
         children: [
@@ -89,7 +105,6 @@ class _AddEventsState extends State<AddEvents> {
             buttonPadding: const EdgeInsets.only(right: 30),
             children: [
               ElevatedButton(
-                child: const Text('Submit'),
                 onPressed: () {
                   setState(() {
                     fieldEventName.text.isEmpty
@@ -103,14 +118,19 @@ class _AddEventsState extends State<AddEvents> {
                         : isDateTime = false;
                   });
                   if (!isName && !isDesc && !isDateTime) {
-                    _saveData(fieldEventName.text, fieldEventDesc.text,
-                        fieldTimeDate.text);
+                    updateData(widget.id, fieldEventName.text,
+                        fieldEventDesc.text, fieldTimeDate.text);
+                        Navigator.pop(context);
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green,
+                ),
+                child: const Text('Save'),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.red),
-                child: const Text('Clear'),
+                child: const Text('Delete'),
                 onPressed: () {
                   fieldEventName.clear();
                   fieldEventDesc.clear();
