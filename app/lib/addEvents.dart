@@ -24,7 +24,7 @@ class _AddEventsState extends State<AddEvents> {
   }
 
   Future _saveData(String name, String desc, String timeDate) async {
-    var url = 'http://192.168.56.1/api/saveData.php';
+    var url = 'http://192.168.1.14/api/saveData.php';
     final response = await http.post(Uri.parse(url),
         body: {"eventName": name, "eventDesc": desc, "timeDate": timeDate});
     var res = response.body;
