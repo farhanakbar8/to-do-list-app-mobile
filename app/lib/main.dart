@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
 
 Future<List> getData() async {
   final response =
-      await http.get(Uri.parse('http://192.168.56.1/api/getData.php'));
+      await http.get(Uri.parse('http://192.168.1.14/api/getData.php'));
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
   } else {
@@ -78,59 +78,64 @@ class _MyHomePageState extends State<MyHomePage> {
               //   events: snapshot.data!,
               // );
               return ListView.builder(
-        itemCount: snapshot.data?.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            child: Container(
-              margin: const EdgeInsets.only(top: 20, right: 20, left: 20),
-              height: 100,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.10),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  )
-                ],
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                    topLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                color: index % 2 == 0
-                    ? const Color.fromRGBO(98, 182, 203, 1)
-                    : const Color.fromRGBO(139, 111, 169, 1),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    snapshot.data![index]['eventName'],
-                    style: const TextStyle(fontSize: 25, color: Colors.white),
-                  ),
-                  Text(
-                    snapshot.data![index]['timeDate'],
-                    style: const TextStyle(fontSize: 15, color: Colors.white),
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UpdateEvents(
-                          id: snapshot.data![index]['id'],
-                          name: snapshot.data![index]['eventName'],
-                          description: snapshot.data![index]['eventDesc'],
-                          time: snapshot.data![index]['timeDate']))).then((_) {
-                            futureData = getData();
-                            setState(() {});
-                          });
-            },
-          );
-        });
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      child: Container(
+                        margin:
+                            const EdgeInsets.only(top: 20, right: 20, left: 20),
+                        height: 100,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.10),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            )
+                          ],
+                          borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                              topLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          color: index % 2 == 0
+                              ? const Color.fromRGBO(98, 182, 203, 1)
+                              : const Color.fromRGBO(139, 111, 169, 1),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              snapshot.data![index]['eventName'],
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white),
+                            ),
+                            Text(
+                              snapshot.data![index]['timeDate'],
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white),
+                            )
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UpdateEvents(
+                                    id: snapshot.data![index]['id'],
+                                    name: snapshot.data![index]['eventName'],
+                                    description: snapshot.data![index]
+                                        ['eventDesc'],
+                                    time: snapshot.data![index]
+                                        ['timeDate']))).then((_) {
+                          futureData = getData();
+                          setState(() {});
+                        });
+                      },
+                    );
+                  });
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }

@@ -1,5 +1,7 @@
 <?php
 include "config.php";
+header("Access-Control-Allow-Origin: *");
+
 $sql = "select * from event";
 $result = array();
 $res = $con->query($sql);

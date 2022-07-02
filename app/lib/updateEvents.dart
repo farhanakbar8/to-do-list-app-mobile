@@ -29,7 +29,7 @@ class _UpdateEventsState extends State<UpdateEvents> {
 
   Future updateData(
       String id, String name, String desc, String timeDate) async {
-    var url = 'http://192.168.56.1/api/updateEvent.php';
+    var url = 'http://192.168.1.14/api/updateEvent.php';
     final response = await http.post(Uri.parse(url), body: {
       "id": id,
       "eventName": name,
@@ -40,7 +40,18 @@ class _UpdateEventsState extends State<UpdateEvents> {
 
     if (res == "true") {
       print('in');
-      
+    } else {
+      // ignore: avoid_print
+      print("Error: $res");
+    }
+  }
+
+  Future deleteEvent() async {
+    var url = 'http://192.168.1.14/api/deleteEvent.php';
+    final response = await http.post(Uri.parse(url), body: {"id": widget.id});
+    var res = response.body;
+    if (res == "true") {
+      print('hapus');
     } else {
       // ignore: avoid_print
       print("Error: $res");
@@ -120,7 +131,7 @@ class _UpdateEventsState extends State<UpdateEvents> {
                   if (!isName && !isDesc && !isDateTime) {
                     updateData(widget.id, fieldEventName.text,
                         fieldEventDesc.text, fieldTimeDate.text);
-                        Navigator.pop(context);
+                    Navigator.pop(context);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -132,9 +143,11 @@ class _UpdateEventsState extends State<UpdateEvents> {
                 style: ElevatedButton.styleFrom(primary: Colors.red),
                 child: const Text('Delete'),
                 onPressed: () {
-                  fieldEventName.clear();
-                  fieldEventDesc.clear();
-                  fieldTimeDate.clear();
+                  // fieldEventName.clear();
+                  // fieldEventDesc.clear();
+                  // fieldTimeDate.clear();
+                  deleteEvent();
+                  Navigator.pop(context);
                 },
               )
             ],
